@@ -34,21 +34,21 @@ public class Enemy : FiniteStateMachine
         base.Update();
         if (Vector3.Distance(transform.position, player.position) <= viewRadius)
         {
-            if (CurrentState.GetType() == typeof(EnemyChaseState))
-            {
-                Debug.Log("Player in range enter chase state");
-                SetState(new EnemyChaseState(this));
-            }
+           // if (CurrentState.GetType() == typeof(EnemyChaseState))
+           // {
+           //     Debug.Log("Player in range enter chase state");
+           //     SetState(new EnemyChaseState(this));
+           // }
             // if not currently chasing player
             // chase player
         }
         else
         {
-            if (CurrentState.GetType() == typeof(EnemyChaseState))
-            {
-                Debug.Log("Enter wander state");
-                SetState(new EnemyWanderState(this));
-            }
+            //if (CurrentState.GetType() == typeof(EnemyChaseState))
+            //{
+            //    Debug.Log("Enter wander state");
+            //    SetState(new EnemyWanderState(this));
+            //}
         }
     }
 
@@ -114,7 +114,7 @@ public class EnemyIdleState : EnemyBehaviourState
         if (Vector3.Distance(Instance.transform.position, Instance.player.position) <= Instance.viewRadius)
         {
          
-                Instance.SetState(new EnemyChaseState(Instance));
+               // Instance.SetState(new EnemyChaseState(Instance));
             
             // if not currently chasing player
             // chase player
@@ -167,7 +167,7 @@ public class EnemyWanderState : EnemyBehaviourState
         if (Vector3.Distance(Instance.transform.position, Instance.player.position) <= Instance.viewRadius)
         {
 
-            Instance.SetState(new EnemyChaseState(Instance));
+            //Instance.SetState(new EnemyChaseState(Instance));
 
             // if not currently chasing player
             // chase player
@@ -190,6 +190,7 @@ public class EnemyWanderState : EnemyBehaviourState
     }
 }
 
+/*
 public class EnemyChaseState : EnemyBehaviourState
 {
 
@@ -224,3 +225,4 @@ public class EnemyChaseState : EnemyBehaviourState
         if (Vector3.Distance(Instance.transform.position)) ;
     }
 }
+*/
