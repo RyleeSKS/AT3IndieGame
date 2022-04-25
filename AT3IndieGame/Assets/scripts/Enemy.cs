@@ -10,7 +10,7 @@ public class Enemy : FiniteStateMachine
     public Transform player;
 
     public NavMeshAgent Agent { get; private set; }
-    public Transform Target { get; private set; }
+
 
     protected override void Awake()
     {
@@ -31,25 +31,10 @@ public class Enemy : FiniteStateMachine
     // Update is called once per frame
     protected override void Update()
     {
+        //NOTE: code bellow debugs what the states are returning
+        //Debug.Log(CurrentState.GetType());
         base.Update();
-        if (Vector3.Distance(transform.position, player.position) <= viewRadius)
-        {
-           // if (CurrentState.GetType() == typeof(EnemyChaseState))
-           // {
-           //     Debug.Log("Player in range enter chase state");
-           //     SetState(new EnemyChaseState(this));
-           // }
-            // if not currently chasing player
-            // chase player
-        }
-        else
-        {
-            //if (CurrentState.GetType() == typeof(EnemyChaseState))
-            //{
-            //    Debug.Log("Enter wander state");
-            //    SetState(new EnemyWanderState(this));
-            //}
-        }
+
     }
 
     protected override void OnDrawGizmos()
@@ -89,6 +74,7 @@ public class EnemyIdleState : EnemyBehaviourState
     private Vector2 idleTimeRange = new Vector2(3, 10);
     private float timer = -1;
     private float idleTime = 0;
+
     public EnemyIdleState(Enemy instance) : base(instance)
     {
 
@@ -113,21 +99,19 @@ public class EnemyIdleState : EnemyBehaviourState
     {
         if (Vector3.Distance(Instance.transform.position, Instance.player.position) <= Instance.viewRadius)
         {
-         
-               // Instance.SetState(new EnemyChaseState(Instance));
-            
-            // if not currently chasing player
-            // chase player
+            Debug.Log("Player in range enter chase state");
+            Instance.SetState(new EnemyChaseState(Instance));
         }
-      
 
-        if(timer >= 0)
-            timer += Time.deltaTime;
-        if(timer >= idleTime)
+
+        if (timer >= 0)
         {
-            
-            Instance.SetState(new EnemyWanderState(Instance));
-            Debug.Log("Exiting idle state after " + idleTime + " seconds");
+            timer += Time.deltaTime;
+            if (timer >= idleTime)
+            {
+                Instance.SetState(new EnemyWanderState(Instance));
+                Debug.Log("Exiting idle state after " + idleTime + " seconds");
+            }
         }
     }
 }
@@ -164,21 +148,20 @@ public class EnemyWanderState : EnemyBehaviourState
 
     public override void OnStateUpdate()
     {
-        if (Vector3.Distance(Instance.transform.position, Instance.player.position) <= Instance.viewRadius)
-        {
-
-            //Instance.SetState(new EnemyChaseState(Instance));
-
-            // if not currently chasing player
-            // chase player
-        }
-
 
         Vector3 t = targetPostion;
         t.y = 0;
+        // check if the AI is Close to its target postion
         if(Vector3.Distance(Instance.transform.position, targetPostion) <= Instance.Agent.stoppingDistance)
         {
             Instance.SetState(new EnemyIdleState(Instance));
+        }
+
+        //check if the player is within the view radius of the AI
+        if (Vector3.Distance(Instance.transform.position, Instance.player.position) <= Instance.viewRadius)
+        {
+            Debug.Log("Player in range enter chase state");
+            Instance.SetState(new EnemyChaseState(Instance));
         }
     }
 
@@ -190,19 +173,20 @@ public class EnemyWanderState : EnemyBehaviourState
     }
 }
 
-/*
 public class EnemyChaseState : EnemyBehaviourState
 {
 
     private float chaseSpeed = 3f;
-    private float defaultSpeed = 3f;
+
     public EnemyChaseState(Enemy instance) : base(instance)
     {
     }
 
     public override void OnStateEnter()
     {
-        Instance.Agent.speed *= chaseSpeed;
+        Instance.Agent.isStopped = false;
+        Instance.Agent.speed = chaseSpeed;
+        Debug.Log("entered chase state.");
     }
 
     public override void OnStateExit()
@@ -212,17 +196,12 @@ public class EnemyChaseState : EnemyBehaviourState
 
     public override void OnStateUpdate()
     {
-        if(Instance.Target != null)
-        {
-            Instance.Agent.SetDestination(Instance.Target.position);
+        Instance.Agent.SetDestination(Instance.player.position);
 
-        }
-        else
+        if (Vector3.Distance(Instance.transform.position, Instance.player.position) > Instance.viewRadius)
         {
+            Debug.Log("Player in range enter chase state");
             Instance.SetState(new EnemyWanderState(Instance));
         }
-
-        if (Vector3.Distance(Instance.transform.position)) ;
     }
 }
-*/
