@@ -28,18 +28,20 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         TryGetComponent(out image);
         transform.parent.TryGetComponent(out instance);
+        image.color = defaultColour;
     }
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
+    /*
     void Start()
     {
-        image.color = defaultColour;
         //NOTE: do not do the following:
         //ActivateEvent += OnActivate;
         //SelectEvent += OnSelect;
     }
+    */
 
     // Update is called once per frame
     void Update()

@@ -59,6 +59,8 @@ public class MenuNavigation : MonoBehaviour
         if(Buttons.Count > 0)
         {
             SelectButton(0);
+            ///This is being called before the start functions on each button
+            ///which means the selection colour is being overriden by the default colour
         }
     }
 

@@ -53,16 +53,16 @@
     <UnityVersion>2020.3.26f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\scripts\SomeScript.cs" />
+    <Compile Include="Assets\scripts\MenuNavigation.cs" />
     <Compile Include="Assets\scripts\testInteration.cs" />
     <Compile Include="Assets\scripts\FiniteStateMachine.cs" />
+    <Compile Include="Assets\scripts\MenuButton.cs" />
     <Compile Include="Assets\scripts\PlayerController.cs" />
     <Compile Include="Assets\scripts\Interaction.cs" />
     <Compile Include="Assets\scripts\MouseLook.cs" />
     <Compile Include="Assets\scripts\Enemy.cs" />
     <Compile Include="Assets\scripts\testInteractionToo.cs" />
-    <Compile Include="Assets\scripts\MenuButton.cs" />
-    <Compile Include="Assets\scripts\MenuNavigation.cs" />
-    <Compile Include="Assets\SomeScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

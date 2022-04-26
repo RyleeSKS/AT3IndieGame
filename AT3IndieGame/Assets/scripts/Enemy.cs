@@ -10,6 +10,7 @@ public class Enemy : FiniteStateMachine
     public Transform player;
 
     public NavMeshAgent Agent { get; private set; }
+    public Animator Anim { get; private set; }
 
 
     protected override void Awake()
@@ -19,7 +20,15 @@ public class Enemy : FiniteStateMachine
         {
             Agent = agent;
         }
+        //code below prevents AI from executing if it doesnt have a child
+        //is there a way for the AI to check if it has a child?
+        //GetChild(0) is the spesific child you want
+        if(transform.GetChild(0).TryGetComponent(out Animator anim) == true)
+        {
+            Anim = anim;
+        }
     }
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -85,7 +94,9 @@ public class EnemyIdleState : EnemyBehaviourState
         Instance.Agent.isStopped = true;
         idleTime = Random.Range(idleTimeRange.x, idleTimeRange.y);
         timer = 0;
-        Debug.Log("idle state entered, waiting for " + idleTime + " seconds");
+        //Debug.Log("idle state entered, waiting for " + idleTime + " seconds");
+        //"isMoving" is your animation controller paramiter
+        Instance.Anim.SetBool("isMoving", false);
     }
 
     public override void OnStateExit()
@@ -119,7 +130,7 @@ public class EnemyIdleState : EnemyBehaviourState
 public class EnemyWanderState : EnemyBehaviourState
 {
     private Vector3 targetPostion;
-    private float wanderSpeed = 3.5f;
+    private float wanderSpeed = 0.5f;
 
     public EnemyWanderState(Enemy instance) : base(instance)
     {
@@ -139,6 +150,8 @@ public class EnemyWanderState : EnemyBehaviourState
         targetPostion = randomPosInBounds;
         Instance.Agent.SetDestination(targetPostion);
         Debug.Log("wander state entered with target postion of " + targetPostion);
+        Instance.Anim.SetBool("isMoving", true);
+        Instance.Anim.SetBool("isChasing", false);
     }
 
     public override void OnStateExit()
@@ -176,7 +189,7 @@ public class EnemyWanderState : EnemyBehaviourState
 public class EnemyChaseState : EnemyBehaviourState
 {
 
-    private float chaseSpeed = 3f;
+    private float chaseSpeed = 1.5f;
 
     public EnemyChaseState(Enemy instance) : base(instance)
     {
@@ -187,6 +200,8 @@ public class EnemyChaseState : EnemyBehaviourState
         Instance.Agent.isStopped = false;
         Instance.Agent.speed = chaseSpeed;
         Debug.Log("entered chase state.");
+        Instance.Anim.SetBool("isMoving", true);
+        Instance.Anim.SetBool("isChasing", true);
     }
 
     public override void OnStateExit()
